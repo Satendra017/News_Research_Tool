@@ -28,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install Streamlit
-          pip install pytest
+          pip install streamlit  # Ensures Streamlit is installed
+          pip install pytest  # If you're running tests with pytest
 
       - name: Run tests
         run: |
@@ -42,8 +42,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx (only if needed for multi-platform)
-        # If you don’t need multi-platform builds, remove this step
+      - name: Set up Docker Buildx (if needed for multi-platform)
         uses: docker/setup-buildx-action@v2
 
       - name: Login to DockerHub
@@ -56,10 +55,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile  # Make sure the Dockerfile path is correct
+          file: ./Dockerfile  # Make sure Dockerfile is correct
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/flasktest-app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/streamlit-app:latest
 
-      # Optional: Only if you need to retrieve and display the image digest
       - name: Image digest
         run: echo ${{ steps.build-and-publish.outputs.digest }}
